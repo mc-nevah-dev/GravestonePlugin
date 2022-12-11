@@ -32,16 +32,24 @@ public class Gravestone extends JavaPlugin implements Listener{
 
         if(playerDeathEvent.getEntity().getInventory().isEmpty()) return;
 
-        GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, uuid);
-        gravestones.put(gravestoneDeath.getLocationString(), gravestoneDeath);
-
         // place bedrock at location
         Block gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
-        // TODO: test bedrock location if not air
-        gravestoneLocation.setType(Material.BEDROCK);
+        while(gravestoneLocation.getType() != Material.AIR && y <= 319){
+            y++;
+            gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
+        }
+        if(y <= 319) {
+            gravestoneLocation.setType(Material.BEDROCK);
 
-        // print to user
-        playerDeathEvent.getEntity().sendMessage(ChatColor.WHITE + "Your gravestone spawned at: "+ChatColor.AQUA + x + " " + y + " " + z);
+            // print to user
+            playerDeathEvent.getEntity().sendMessage(ChatColor.WHITE + "Your gravestone spawned at: "+ChatColor.AQUA + x + " " + y + " " + z);
+
+            // add gravestone death into store
+            GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, uuid);
+            gravestones.put(gravestoneDeath.getLocationString(), gravestoneDeath);
+        } else {
+            playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your gravestone could not spawn. Your items got deleted.");
+        }
     }
 
     @EventHandler
