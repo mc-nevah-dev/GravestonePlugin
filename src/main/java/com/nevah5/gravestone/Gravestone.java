@@ -14,6 +14,7 @@ import java.util.*;
 
 public class Gravestone extends JavaPlugin implements Listener{
     private HashMap<String, GravestoneDeath> gravestones = new HashMap<>();
+    private List<GravestoneDeathFail> gravestonesFailes = new ArrayList<>();
 
     @Override
     public void onEnable(){
@@ -48,7 +49,8 @@ public class Gravestone extends JavaPlugin implements Listener{
             GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, uuid);
             gravestones.put(gravestoneDeath.getLocationString(), gravestoneDeath);
         } else {
-            playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your gravestone could not spawn. Your items got deleted.");
+            gravestonesFailes.add(new GravestoneDeathFail(drops, x, z, uuid));
+            playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your gravestone could not spawn. Your items have been stored. Please get in contact with an Administrator to retrieve them.");
         }
     }
 

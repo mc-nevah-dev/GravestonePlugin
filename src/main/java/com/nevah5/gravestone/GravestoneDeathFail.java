@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Gravestones that spawned
+ * Gravestones that failed to spawn
  * @param items
  * @param x
  * @param z
  * @param uuid
  */
-public record GravestoneDeath(@Getter List<ItemStack> items, int x, int y, int z, @Getter UUID uuid) {
-    public String getLocationString() { return x+"."+y+"."+z; }
+public record GravestoneDeathFail(@Getter List<ItemStack> items, int x, int z, @Getter UUID uuid) {
 }
