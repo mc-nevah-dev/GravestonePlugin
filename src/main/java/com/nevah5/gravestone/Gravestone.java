@@ -1,7 +1,9 @@
 package com.nevah5.gravestone;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -30,8 +32,18 @@ public class Gravestone extends JavaPlugin implements Listener{
         int z = playerDeathEvent.getEntity().getLocation().getBlockZ();
         UUID uuid = playerDeathEvent.getEntity().getUniqueId();
 
+        if(playerDeathEvent.getEntity().getInventory().isEmpty()) return;
+
         GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, uuid);
         gravestones.put(gravestoneDeath.getLocationString(), gravestoneDeath);
+
+        // place bedrock at location
+        Block gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
+        // TODO: test bedrock location if not air
+        gravestoneLocation.setType(Material.BEDROCK);
+
+        // print to user
+        playerDeathEvent.getEntity().sendMessage(ChatColor.WHITE + "Your gravestone spawned at: "+ChatColor.AQUA + x + " " + y + " " + z);
     }
 
     @EventHandler
@@ -49,7 +61,12 @@ public class Gravestone extends JavaPlugin implements Listener{
         if(gravestone.getUuid() != playerInteractEvent.getPlayer().getUniqueId()) return;
 
         // player is owner of gravestone
-        //give items to owner
-        Bukkit.broadcastMessage(gravestone.getItems().toString());
+        // give items to owner
+        playerInteractEvent.getPlayer().getInventory().addItem(gravestone.getItems().toArray(new ItemStack[0]));
+        // TODO: DROP ITEMS THAT VANISH
+
+        // clear gravestone
+        playerInteractEvent.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
+        gravestones.remove(key);
     }
 }
