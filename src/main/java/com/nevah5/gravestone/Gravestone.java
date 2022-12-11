@@ -1,8 +1,6 @@
 package com.nevah5.gravestone;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -62,8 +60,10 @@ public class Gravestone extends JavaPlugin implements Listener{
 
         // player is owner of gravestone
         // give items to owner
-        playerInteractEvent.getPlayer().getInventory().addItem(gravestone.getItems().toArray(new ItemStack[0]));
-        // TODO: DROP ITEMS THAT VANISH
+        World playerWorld = playerInteractEvent.getPlayer().getWorld();
+        Location itemDropLocation = new Location(playerWorld, x, y, z);
+        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.getItems().toArray(new ItemStack[0]));
+        overflowItems.forEach((integer, itemStack) -> playerWorld.dropItem(itemDropLocation, itemStack));
 
         // clear gravestone
         playerInteractEvent.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
