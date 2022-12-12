@@ -24,6 +24,11 @@ public class Gravestone extends JavaPlugin implements Listener{
         this.getCommand("gravestones").setExecutor(new GravestoneCommand());
     }
 
+    @Override
+    public void onDisable() {
+        this.gravestoneConfigs.save();
+    }
+
     @EventHandler
     public void onDeath(PlayerDeathEvent playerDeathEvent){
         List<ItemStack> drops = new ArrayList<>(playerDeathEvent.getDrops());
