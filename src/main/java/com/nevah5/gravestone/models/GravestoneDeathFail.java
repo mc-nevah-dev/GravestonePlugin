@@ -1,4 +1,4 @@
-package com.nevah5.gravestone;
+package com.nevah5.gravestone.models;
 
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
