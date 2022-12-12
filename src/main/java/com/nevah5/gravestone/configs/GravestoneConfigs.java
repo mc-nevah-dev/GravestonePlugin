@@ -1,17 +1,31 @@
 package com.nevah5.gravestone.configs;
 
-import com.google.gson.Gson;
+import com.nevah5.gravestone.Gravestone;
 import com.nevah5.gravestone.models.GravestoneDeath;
-import org.bukkit.Bukkit;
+import com.nevah5.gravestone.models.GravestoneDeathFail;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class GravestoneConfigs {
-    Gson gson = new Gson();
-    public void storeGravestones(HashMap<String, GravestoneDeath> gravestoneDeathHashMap){
-        Map<String, GravestoneDeath> gravestoneDeaths = new HashMap<>(gravestoneDeathHashMap);
-        String json = gson.toJson(gravestoneDeaths);
-        Bukkit.broadcastMessage(json);
+    private Gravestone plugin;
+    private HashMap<String, GravestoneDeath> gravestones = new HashMap<>();
+    private List<GravestoneDeathFail> gravestonesFailes = new ArrayList<>();
+
+    public GravestoneConfigs(Gravestone plugin){
+        this.plugin = plugin;
+    }
+
+    public GravestoneDeath getByKey(String key){
+        return gravestones.get(key);
+    }
+
+    public void removeByKey(String key){
+        gravestones.remove(key);
+    }
+
+    public void add(String key, GravestoneDeath gd){
+        gravestones.put(key, gd);
     }
 }
