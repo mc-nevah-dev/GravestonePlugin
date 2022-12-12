@@ -1,5 +1,6 @@
 package com.nevah5.gravestone;
 
+import com.nevah5.gravestone.commands.GravestoneCommand;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import com.nevah5.gravestone.models.GravestoneDeathFail;
 import org.bukkit.*;
@@ -21,6 +22,7 @@ public class Gravestone extends JavaPlugin implements Listener{
     @Override
     public void onEnable(){
         Bukkit.getPluginManager().registerEvents(this, this);
+        this.getCommand("gravestones").setExecutor(new GravestoneCommand());
     }
 
     @EventHandler

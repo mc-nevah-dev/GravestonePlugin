@@ -3,3 +3,8 @@ version: 1.0.0
 author: Nevah5
 main: com.nevah5.gravestone.Gravestone
 api-version: 1.19
+commands:
+  gravestones:
+    description: Manage gravestones with this command.
+    usage: /gravestones <list/claim> [player]
+    permission: gravestones
