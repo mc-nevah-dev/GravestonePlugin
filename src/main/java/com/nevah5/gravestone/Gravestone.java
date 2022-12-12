@@ -1,5 +1,7 @@
 package com.nevah5.gravestone;
 
+import com.nevah5.gravestone.models.GravestoneDeath;
+import com.nevah5.gravestone.models.GravestoneDeathFail;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -34,12 +36,13 @@ public class Gravestone extends JavaPlugin implements Listener{
         if(playerDeathEvent.getEntity().getInventory().isEmpty()) return;
 
         // place bedrock at location
+        int maxWorldHeight = playerDeathEvent.getEntity().getWorld().getMaxHeight();
         Block gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
-        while(gravestoneLocation.getType() != Material.AIR && y <= 319){
+        while(gravestoneLocation.getType() != Material.AIR && y <= maxWorldHeight){
             y++;
             gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
         }
-        if(y <= 319) {
+        if(y <= maxWorldHeight) {
             gravestoneLocation.setType(Material.BEDROCK);
 
             // print to user
