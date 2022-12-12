@@ -1,6 +1,7 @@
 package com.nevah5.gravestone;
 
 import com.nevah5.gravestone.commands.GravestoneCommand;
+import com.nevah5.gravestone.configs.GravestoneConfigs;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import com.nevah5.gravestone.models.GravestoneDeathFail;
 import org.bukkit.*;
@@ -16,6 +17,7 @@ import org.bukkit.event.Listener;
 import java.util.*;
 
 public class Gravestone extends JavaPlugin implements Listener{
+    GravestoneConfigs gravestoneConfigs = new GravestoneConfigs();
     private HashMap<String, GravestoneDeath> gravestones = new HashMap<>();
     private List<GravestoneDeathFail> gravestonesFailes = new ArrayList<>();
 
@@ -57,6 +59,9 @@ public class Gravestone extends JavaPlugin implements Listener{
             gravestonesFailes.add(new GravestoneDeathFail(drops, x, z, uuid));
             playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your gravestone could not spawn. Your items have been stored. Please get in contact with an Administrator to retrieve them.");
         }
+
+        // store into config
+        gravestoneConfigs.storeGravestones(gravestones);
     }
 
     @EventHandler
@@ -86,5 +91,8 @@ public class Gravestone extends JavaPlugin implements Listener{
 
         // cancel the event to prevent block placement if holding block
         playerInteractEvent.setCancelled(true);
+
+        // update configs
+        gravestoneConfigs.storeGravestones(gravestones);
     }
 }
