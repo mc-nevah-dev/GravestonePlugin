@@ -78,5 +78,8 @@ public class Gravestone extends JavaPlugin implements Listener{
         // clear gravestone
         playerInteractEvent.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
         gravestones.remove(key);
+
+        // cancel the event to prevent block placement if holding block
+        playerInteractEvent.setCancelled(true);
     }
 }
