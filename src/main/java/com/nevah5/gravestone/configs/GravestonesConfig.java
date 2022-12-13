@@ -16,7 +16,7 @@ public class GravestonesConfig {
 
     private final File file;
     private final FileConfiguration config;
-    private Map<String, GravestoneDeath> gravestones;
+    private Map<String, GravestoneDeath> gravestones = new HashMap<>();
 
     public GravestonesConfig(Gravestone plugin){
         file = new File(plugin.getDataFolder(), "data.yml");
