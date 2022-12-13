@@ -1,7 +1,7 @@
 package com.nevah5.gravestone;
 
 import com.nevah5.gravestone.commands.GravestoneCommand;
-import com.nevah5.gravestone.configs.GravestoneConfigs;
+import com.nevah5.gravestone.configs.GravestonesConfig;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 import java.util.*;
 
 public class Gravestone extends JavaPlugin implements Listener{
-    GravestoneConfigs gravestoneConfigs = new GravestoneConfigs(this);
+    GravestonesConfig gravestoneConfigs = new GravestonesConfig(this);
 
     @Override
     public void onEnable(){
@@ -58,7 +58,8 @@ public class Gravestone extends JavaPlugin implements Listener{
             GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, uuid);
             gravestoneConfigs.add(gravestoneDeath.getLocationString(), gravestoneDeath);
         } else {
-            //gravestonesFailes.add(new GravestoneDeathFail(drops, x, z, uuid));
+            // TODO: store failed
+            // gravestonesFailes.add(new GravestoneDeathFail(drops, x, z, uuid));
             playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your gravestone could not spawn. Your items have been stored. Please get in contact with an Administrator to retrieve them.");
         }
     }
@@ -71,23 +72,20 @@ public class Gravestone extends JavaPlugin implements Listener{
         int x = playerInteractEvent.getClickedBlock().getX();
         int y = playerInteractEvent.getClickedBlock().getY();
         int z = playerInteractEvent.getClickedBlock().getZ();
-        String key = x+"."+y+"."+z;
+        String key = x+";"+y+";"+z;
 
         GravestoneDeath gravestone = gravestoneConfigs.getByKey(key);
         if(gravestone == null) return;
-        if(gravestone.getUuid() != playerInteractEvent.getPlayer().getUniqueId()) return;
+        if(gravestone.uuid != playerInteractEvent.getPlayer().getUniqueId()) return;
 
         // player is owner of gravestone
         // give items to owner
-        World playerWorld = playerInteractEvent.getPlayer().getWorld();
-        Location itemDropLocation = new Location(playerWorld, x, y, z);
-        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.getItems().toArray(new ItemStack[0]));
+        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.items.toArray(new ItemStack[0]));
 
-        //clear old gravestone
+        // clear old gravestone
         gravestoneConfigs.removeByKey(key);
 
         // create a new gravestone if overflow items exist
-
         List<ItemStack> overflowItemsList = new ArrayList<>();
         overflowItems.forEach((integer, itemStack) -> overflowItemsList.add(itemStack));
         if(overflowItemsList.size() != 0) gravestoneConfigs.add(key, new GravestoneDeath(overflowItemsList, x, y, z, playerInteractEvent.getPlayer().getUniqueId()));
