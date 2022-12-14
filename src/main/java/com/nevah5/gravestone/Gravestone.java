@@ -1,7 +1,7 @@
 package com.nevah5.gravestone;
 
 import com.nevah5.gravestone.commands.GravestoneCommand;
-import com.nevah5.gravestone.configs.GravestonesConfig;
+import com.nevah5.gravestone.configs.GravestoneConfigs;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,13 +18,11 @@ import org.bukkit.event.Listener;
 import java.util.*;
 
 public class Gravestone extends JavaPlugin implements Listener {
-    GravestonesConfig gravestoneConfigs = null;
+    GravestoneConfigs gravestoneConfigs = null;
 
     @Override
     public void onEnable(){
-        ConfigurationSerialization.registerClass(GravestoneDeath.class);
-
-        this.gravestoneConfigs = new GravestonesConfig(this);
+        this.gravestoneConfigs = new GravestoneConfigs(this);
         Bukkit.getPluginManager().registerEvents(this, this);
         this.getCommand("gravestones").setExecutor(new GravestoneCommand());
     }
