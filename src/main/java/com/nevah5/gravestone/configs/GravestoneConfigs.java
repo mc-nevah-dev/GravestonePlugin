@@ -2,6 +2,7 @@ package com.nevah5.gravestone.configs;
 
 import com.nevah5.gravestone.Gravestone;
 import com.nevah5.gravestone.models.GravestoneDeath;
+import com.nevah5.gravestone.models.GravestoneDeathFail;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -13,10 +14,12 @@ import java.util.stream.Collectors;
 
 public class GravestoneConfigs {
     private final static String GRAVESTONE_DATA_PATH = "gravestones";
+    private final static String GRAVESTONE_FAILED_DATA_PATH = "failed-gravestones";
 
     private final File file;
     private final FileConfiguration config;
     private Map<String, GravestoneDeath> gravestones;
+    private List<GravestoneDeathFail> failedGravestones = new ArrayList<>();
 
     public GravestoneConfigs(Gravestone plugin){
         ConfigurationSerialization.registerClass(GravestoneDeath.class);

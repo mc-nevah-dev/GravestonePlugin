@@ -1,6 +1,7 @@
 package com.nevah5.gravestone.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -14,11 +15,13 @@ import java.util.UUID;
 @SerializableAs("com.nevah5.gravestone.models.GravestoneDeath")
 @AllArgsConstructor
 public class GravestoneDeath implements ConfigurationSerializable {
-    public List<ItemStack> items;
-    public int x;
-    public int y;
-    public int z;
-    public UUID uuid;
+    @Getter
+    private List<ItemStack> items;
+    private int x;
+    private int y;
+    private int z;
+    @Getter
+    private UUID uuid;
     public String getLocationString() { return x+";"+y+";"+z; }
 
     @Override

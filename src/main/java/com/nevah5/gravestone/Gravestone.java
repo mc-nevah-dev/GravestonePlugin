@@ -1,11 +1,9 @@
 package com.nevah5.gravestone;
 
-import com.nevah5.gravestone.commands.GravestoneCommand;
 import com.nevah5.gravestone.configs.GravestoneConfigs;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -24,7 +22,6 @@ public class Gravestone extends JavaPlugin implements Listener {
     public void onEnable(){
         this.gravestoneConfigs = new GravestoneConfigs(this);
         Bukkit.getPluginManager().registerEvents(this, this);
-        this.getCommand("gravestones").setExecutor(new GravestoneCommand());
     }
 
     @Override
@@ -80,11 +77,11 @@ public class Gravestone extends JavaPlugin implements Listener {
 
         GravestoneDeath gravestone = gravestoneConfigs.getByKey(key);
         if(gravestone == null) return;
-        if(!gravestone.uuid.equals(playerInteractEvent.getPlayer().getUniqueId())) return;
+        if(!gravestone.getUuid().equals(playerInteractEvent.getPlayer().getUniqueId())) return;
 
         // player is owner of gravestone
         // give items to owner
-        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.items.toArray(new ItemStack[0]));
+        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.getItems().toArray(new ItemStack[0]));
 
         // clear old gravestone
         gravestoneConfigs.removeByKey(key);
