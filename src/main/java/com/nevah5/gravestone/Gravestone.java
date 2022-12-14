@@ -60,7 +60,7 @@ public class Gravestone extends JavaPlugin implements Listener {
         } else {
             // TODO: store failed
             // gravestonesFailes.add(new GravestoneDeathFail(drops, x, z, uuid));
-            playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your gravestone could not spawn. Your items have been stored. Please get in contact with an Administrator to retrieve them.");
+            playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your Gravestone couldn't spawn. Items have been deleted.");
         }
     }
 
