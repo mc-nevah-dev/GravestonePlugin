@@ -114,7 +114,9 @@ public class Gravestone extends JavaPlugin implements Listener {
         int y = gravestoneLocation.getY();
         int z = gravestoneLocation.getZ();
 
-        gravestoneLocation.setType(Material.BEDROCK);
+        // set grave after 1ms because of creeper explosions
+        Bukkit.getServer().getScheduler()
+            .runTaskLater(this, () -> gravestoneLocation.setType(Material.BEDROCK), 1L);
 
         // print to user
         player.sendMessage(ChatColor.WHITE + "Your gravestone spawned at: "+ChatColor.AQUA + x + " " + y + " " + z);
