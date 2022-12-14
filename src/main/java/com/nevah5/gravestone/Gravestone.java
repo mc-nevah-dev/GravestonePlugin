@@ -2,6 +2,7 @@ package com.nevah5.gravestone;
 
 import com.nevah5.gravestone.commands.GravestoneCommand;
 import com.nevah5.gravestone.configs.GravestonesConfig;
+import com.nevah5.gravestone.inventories.GravestoneInventory;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -80,17 +81,18 @@ public class Gravestone extends JavaPlugin implements Listener{
 
         // player is owner of gravestone
         // give items to owner
-        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.items.toArray(new ItemStack[0]));
+//        HashMap<Integer, ItemStack> overflowItems = playerInteractEvent.getPlayer().getInventory().addItem(gravestone.items.toArray(new ItemStack[0]));
 
         // clear old gravestone
-        gravestoneConfigs.removeByKey(key);
+//        gravestoneConfigs.removeByKey(key);
 
         // create a new gravestone if overflow items exist
-        List<ItemStack> overflowItemsList = new ArrayList<>();
-        overflowItems.forEach((integer, itemStack) -> overflowItemsList.add(itemStack));
-        if(overflowItemsList.size() != 0) gravestoneConfigs.add(key, new GravestoneDeath(overflowItemsList, x, y, z, playerInteractEvent.getPlayer().getUniqueId()));
-        // if no overflow items,
-        if(overflowItemsList.size() == 0) playerInteractEvent.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
+//        List<ItemStack> overflowItemsList = new ArrayList<>();
+        new GravestoneInventory(playerInteractEvent.getPlayer(), playerInteractEvent.getPlayer().getInventory()).openInventory();
+//        overflowItems.forEach((integer, itemStack) -> overflowItemsList.add(itemStack));
+//        if(overflowItemsList.size() != 0) gravestoneConfigs.add(key, new GravestoneDeath(overflowItemsList, x, y, z, playerInteractEvent.getPlayer().getUniqueId()));
+        // if no overflow items, remove
+//        if(overflowItemsList.size() == 0) playerInteractEvent.getPlayer().getWorld().getBlockAt(x, y, z).setType(Material.AIR);
 
         // cancel the event to prevent block placement if holding block
         playerInteractEvent.setCancelled(true);
