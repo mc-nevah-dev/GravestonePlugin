@@ -4,6 +4,7 @@ import com.nevah5.gravestone.configs.GravestoneConfigs;
 import com.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -32,36 +33,47 @@ public class Gravestone extends JavaPlugin implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent playerDeathEvent){
         List<ItemStack> drops = new ArrayList<>(playerDeathEvent.getDrops());
-        playerDeathEvent.getDrops().clear();
 
         int x = playerDeathEvent.getEntity().getLocation().getBlockX();
         int y = playerDeathEvent.getEntity().getLocation().getBlockY();
+        int initY = playerDeathEvent.getEntity().getLocation().getBlockY();
         int z = playerDeathEvent.getEntity().getLocation().getBlockZ();
-        UUID uuid = playerDeathEvent.getEntity().getUniqueId();
 
         if(playerDeathEvent.getEntity().getInventory().isEmpty()) return;
 
-        // place bedrock at location
+        // check for possible grave positions
         int maxWorldHeight = playerDeathEvent.getEntity().getWorld().getMaxHeight();
+        int minWorldHeight = playerDeathEvent.getEntity().getWorld().getMinHeight();
         Block gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
         while(gravestoneLocation.getType() != Material.AIR && y <= maxWorldHeight){
             y++;
             gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
         }
         if(y <= maxWorldHeight) {
-            gravestoneLocation.setType(Material.BEDROCK);
+            spawnGravestone(gravestoneLocation, drops, Objects.requireNonNull(playerDeathEvent.getEntity().getPlayer()));
 
-            // print to user
-            playerDeathEvent.getEntity().sendMessage(ChatColor.WHITE + "Your gravestone spawned at: "+ChatColor.AQUA + x + " " + y + " " + z);
-
-            // add gravestone death into store
-            GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, uuid);
-            gravestoneConfigs.add(gravestoneDeath.getLocationString(), gravestoneDeath);
-        } else {
-            // TODO: store failed
-            // gravestonesFailes.add(new GravestoneDeathFail(drops, x, z, uuid));
-            playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your Gravestone couldn't spawn. Items have been deleted.");
+            // prevent drops from dropping where player died
+            playerDeathEvent.getDrops().clear();
+            return;
         }
+
+        // test if spawn possible below player
+        y = playerDeathEvent.getEntity().getLocation().getBlockY(); // reset y
+        y--; // test block below death location
+        gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
+        gravestoneLocation.getType();
+
+        while(gravestoneLocation.getType() != Material.AIR && y >= minWorldHeight){
+            y--;
+            gravestoneLocation = playerDeathEvent.getEntity().getWorld().getBlockAt(x, y, z);
+        }
+        if(y >= minWorldHeight){
+            spawnGravestone(gravestoneLocation, drops, playerDeathEvent.getEntity());
+
+            playerDeathEvent.getDrops().clear();
+            return;
+        }
+        playerDeathEvent.getEntity().sendMessage(ChatColor.RED + "Your Gravestone couldn't spawn. Your items have dropped where you died.");
     }
 
     @EventHandler
@@ -95,5 +107,20 @@ public class Gravestone extends JavaPlugin implements Listener {
 
         // cancel the event to prevent block placement if holding block
         playerInteractEvent.setCancelled(true);
+    }
+
+    private void spawnGravestone(Block gravestoneLocation, List<ItemStack> drops, Player player){
+        int x = gravestoneLocation.getX();
+        int y = gravestoneLocation.getY();
+        int z = gravestoneLocation.getZ();
+
+        gravestoneLocation.setType(Material.BEDROCK);
+
+        // print to user
+        player.sendMessage(ChatColor.WHITE + "Your gravestone spawned at: "+ChatColor.AQUA + x + " " + y + " " + z);
+
+        // add gravestone death into store
+        GravestoneDeath gravestoneDeath = new GravestoneDeath(drops, x, y, z, player.getUniqueId());
+        gravestoneConfigs.add(gravestoneDeath.getLocationString(), gravestoneDeath);
     }
 }
