@@ -17,7 +17,7 @@ import org.bukkit.event.Listener;
 import java.util.*;
 
 public class Gravestone extends JavaPlugin implements Listener {
-    GravestoneConfigs gravestoneConfigs = null;
+    GravestoneConfigs gravestoneConfigs;
 
     @Override
     public void onEnable(){
@@ -36,7 +36,6 @@ public class Gravestone extends JavaPlugin implements Listener {
 
         int x = playerDeathEvent.getEntity().getLocation().getBlockX();
         int y = playerDeathEvent.getEntity().getLocation().getBlockY();
-        int initY = playerDeathEvent.getEntity().getLocation().getBlockY();
         int z = playerDeathEvent.getEntity().getLocation().getBlockZ();
 
         if(playerDeathEvent.getEntity().getInventory().isEmpty()) return;
