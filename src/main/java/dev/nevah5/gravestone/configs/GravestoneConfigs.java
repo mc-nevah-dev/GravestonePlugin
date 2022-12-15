@@ -1,7 +1,7 @@
-package com.nevah5.gravestone.configs;
+package dev.nevah5.gravestone.configs;
 
-import com.nevah5.gravestone.Gravestone;
-import com.nevah5.gravestone.models.GravestoneDeath;
+import dev.nevah5.gravestone.Gravestone;
+import dev.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;

@@ -1,7 +1,7 @@
-package com.nevah5.gravestone;
+package dev.nevah5.gravestone;
 
-import com.nevah5.gravestone.configs.GravestoneConfigs;
-import com.nevah5.gravestone.models.GravestoneDeath;
+import dev.nevah5.gravestone.configs.GravestoneConfigs;
+import dev.nevah5.gravestone.models.GravestoneDeath;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

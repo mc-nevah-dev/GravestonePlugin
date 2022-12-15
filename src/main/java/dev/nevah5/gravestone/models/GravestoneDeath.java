@@ -1,4 +1,4 @@
-package com.nevah5.gravestone.models;
+package dev.nevah5.gravestone.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@SerializableAs("com.nevah5.gravestone.models.GravestoneDeath")
+@SerializableAs("dev.nevah5.gravestone.models.GravestoneDeath")
 @AllArgsConstructor
 public class GravestoneDeath implements ConfigurationSerializable {
     @Getter
